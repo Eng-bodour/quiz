@@ -10,24 +10,44 @@ class TimerWidget extends StatefulWidget {
 }
 
 class _TimerWidgetState extends State<TimerWidget> {
-  Duration duration = Duration();
+  Duration countdownDuration = Duration(minutes: 10);
+  Duration duration = const Duration();
   Timer? timer;
+  bool isCountdown = true;
+
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     startTimer();
+    reset();
+  }
+
+  void reset() {
+    if (isCountdown) {
+      setState(() {
+        duration = countdownDuration;
+      });
+    } else {
+      setState(() {
+        duration = const Duration();
+      });
+    }
   }
 
   void addTime() {
     setState(() {
-      final seconds = duration.inSeconds + 1;
-      duration = Duration(seconds: seconds);
+      final addSeconds = isCountdown ? -1 : 1;
+      final seconds = duration.inSeconds + addSeconds;
+      if (seconds < 0) {
+        timer?.cancel();
+      } else {
+        duration = Duration(seconds: seconds);
+      }
     });
   }
 
   void startTimer() {
-    timer = Timer.periodic(Duration(seconds: 1), (_) {
+    timer = Timer.periodic(const Duration(seconds: 1), (_) {
       addTime();
     });
   }
