@@ -10,8 +10,8 @@ class BodyWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Stack(
-      children: const [
-        ProgressBar(),
+      children: [
+        const ProgressBar(),
         const SizedBox(
           height: 50,
         ),
